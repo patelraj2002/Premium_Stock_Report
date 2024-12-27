@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>QuantEdge Insights: Premium Stock Analysis</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <style>
+            :root {
+                --primary-color: #2c3e50;
+                --secondary-color: #42b983;
+                --accent-color: #e74c3c;
+                --background-color: #f5f7fa;
+                --text-color: #34495e;
+                --border-color: #e0e0e0;
+                --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                --input-border-color: #ced4da;
+                --input-focus-color: #80bdff;
+            }
+
+            body {
+                font-family: "Poppins", sans-serif;
+                background-color: var(--background-color);
+                color: var(--text-color);
+                line-height: 1.6;
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 2rem;
+            }
+
+            .header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 2rem;
+                background-color: #fff;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: var(--box-shadow);
+            }
+
+            .header h1 {
+                font-size: 2rem;
+                font-weight: 600;
+                margin: 0;
+                color: var(--primary-color);
+            }
+
+            .header-right {
+                display: flex;
+                align-items: center;
+            }
+
+            .header-right a {
+                display: inline-block;
+                margin-left: 2rem;
+                color: var(--text-color);
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            .header-right a:hover {
+                color: var(--primary-color);
+            }
+
+            .input-group {
+                display: flex;
+                margin-bottom: 2rem;
+                position: relative;
+                background-color: #fff;
+                border-radius: 0.5rem;
+                box-shadow: var(--box-shadow);
+                padding: 0.5rem;
+            }
+
+            .input-group input {
+                flex-grow: 1;
+                padding: 1rem;
+                border: none;
+                border-radius: 0.5rem 0 0 0.5rem;
+                font-size: 1rem;
+                color: var(--text-color);
+                background-color: transparent;
+                transition: border-color 0.3s ease;
+            }
+
+            .input-group input::placeholder {
+                color: #888;
+            }
+
+            .input-group input:focus {
+                outline: none;
+                border-color: var(--input-focus-color);
+            }
+
+            .input-group input.error {
+                border-color: var(--accent-color);
+            }
+
+            .input-group button {
+                padding: 1rem 1.5rem;
+                border: none;
+                border-radius: 0 0.5rem 0.5rem 0;
+                background-color: var(--secondary-color);
+                color: #fff;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .input-group button:hover {
+                background-color: var(--primary-color);
+            }
+
+            .input-group button:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
+
+            .report-section {
+                background-color: #fff;
+                border-radius: 0.5rem;
+                padding: 2rem;
+                margin-bottom: 2rem;
+                box-shadow: var(--box-shadow);
+            }
+
+            .report-section h2 {
+                font-size: 1.8rem;
+                font-weight: 600;
+                margin-top: 0;
+                margin-bottom: 1rem;
+                color: var(--primary-color);
+            }
+
+            .report-content {
+                font-size: 1rem;
+            }
+
+            .report-content p {
+                margin-bottom: 1rem;
+            }
+
+            .report-content ul,
+            .report-content ol {
+                padding-left: 2rem;
+                margin-bottom: 1rem;
+            }
+
+            .report-content li {
+                margin-bottom: 0.5rem;
+            }
+
+            .report-content strong {
+                color: var(--secondary-color);
+                font-weight: 600;
+            }
+
+            .report-content em {
+                font-style: italic;
+                color: var(--accent-color);
+            }
+
+            .report-content u {
+                text-decoration: underline;
+                text-decoration-color: var(--accent-color);
+                text-decoration-thickness: 2px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                margin-bottom: 2rem;
+                border-radius: 0.5rem;
+                box-shadow: var(--box-shadow);
+                overflow: hidden;
+            }
+
+            th,
+            td {
+                border: 1px solid var(--border-color);
+                padding: 1rem;
+                text-align: left;
+            }
+
+            th {
+                background-color: var(--secondary-color);
+                color: #fff;
+                font-weight: 600;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f8f9fa;
+            }
+
+            .download-btn {
+                display: inline-block;
+                padding: 1rem 2rem;
+                border: none;
+                border-radius: 0.5rem;
+                background-color: var(--accent-color);
+                color: #fff;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                box-shadow: var(--box-shadow);
+            }
+
+            .download-btn:hover {
+                background-color: #138496;
+            }
+
+            .real-data {
+                color: var(--real-data-color);
+                font-weight: 600;
+            }
+
+            .dummy-data {
+                color: var(--dummy-data-color);
+                font-weight: 600;
+            }
+
+            .legend {
+                background-color: #fff;
+                border-radius: 0.5rem;
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+                box-shadow: var(--box-shadow);
+            }
+
+            .highlight {
+                background-color: var(--highlight-color);
+                padding: 0.25rem 0.5rem;
+                border-radius: 0.25rem;
+                font-weight: 600;
+            }
+
+            #loading {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(255, 255, 255, 0.8);
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            }
+
+            .spinner {
+                width: 60px;
+                height: 60px;
+                border: 6px solid var(--secondary-color);
+                border-top: 6px solid var(--primary-color);
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .key-metrics {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                margin-bottom: 2rem;
+            }
+
+            .metric-card {
+                background-color: #fff;
+                border-radius: 0.5rem;
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+                width: calc(33% - 1rem);
+                box-shadow: var(--box-shadow);
+            }
+
+            .metric-title {
+                font-size: 1rem;
+                font-weight: 600;
+                color: var(--secondary-color);
+                margin-bottom: 0.5rem;
+            }
+
+            .metric-value {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--primary-color);
+            }
+
+            .quote {
+                font-style: italic;
+                font-size: 1.1rem;
+                color: var(--secondary-color);
+                border-left: 4px solid var(--accent-color);
+                padding-left: 1rem;
+                margin: 1.5rem 0;
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    padding: 1rem;
+                }
+
+                .header h1 {
+                    font-size: 1.8rem;
+                }
+
+                .input-group input {
+                    font-size: 0.9rem;
+                }
+
+                .input-group button {
+                    padding: 0.8rem 1.2rem;
+                }
+
+                .metric-card {
+                    width: 100%;
+                }
+
+                .report-section {
+                    padding: 1.5rem;
+                }
+
+                .report-section h2 {
+                    font-size: 1.6rem;
+                }
+
+                .report-content {
+                    font-size: 0.9rem;
+                }
+
+                .key-metrics {
+                    flex-direction: column;
+                }
+
+                .metric-card {
+                    margin-bottom: 1rem;
+                }
+                .research-paper {
+                    margin: 1.5rem 0;
+                    padding: 1.5rem;
+                    border-radius: 8px;
+                    background-color: #f8f9fa;
+                    border-left: 4px solid var(--secondary-color);
+                    transition: transform 0.2s ease;
+                }
+                
+                .research-paper:hover {
+                    transform: translateX(5px);
+                }
+                
+                .research-paper h4 {
+                    color: var(--primary-color);
+                    font-size: 1.1rem;
+                    margin-bottom: 1rem;
+                    font-weight: 600;
+                }
+                
+                .research-meta {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 0.5rem;
+                    margin: 1rem 0;
+                    font-size: 0.9rem;
+                    color: var(--text-color);
+                }
+                
+                .research-link {
+                    color: var(--secondary-color);
+                    text-decoration: none;
+                    font-weight: 500;
+                    transition: color 0.2s ease;
+                }
+                
+                .research-link:hover {
+                    color: var(--primary-color);
+                    text-decoration: underline;
+                }
+                
+                .research-themes,
+                .investment-implications,
+                .research-recommendations {
+                    margin: 2rem 0;
+                    padding: 1.5rem;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+                
+                .research-themes h3,
+                .investment-implications h3,
+                .research-recommendations h3 {
+                    color: var(--primary-color);
+                    margin-bottom: 1rem;
+                    padding-bottom: 0.5rem;
+                    border-bottom: 2px solid var(--secondary-color);
+                }
+                
+                .research-themes ul,
+                .investment-implications ul,
+                .research-recommendations ul {
+                    margin-left: 1.5rem;
+                }
+                
+                .research-themes li,
+                .investment-implications li,
+                .research-recommendations li {
+                    margin-bottom: 0.5rem;
+                    position: relative;
+                }
+                
+                /* Focus area styling */
+                .research-paper .focus-area {
+                    display: inline-block;
+                    padding: 0.25rem 0.75rem;
+                    background-color: var(--secondary-color);
+                    color: white;
+                    border-radius: 999px;
+                    font-size: 0.8rem;
+                    margin-top: 0.5rem;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="header">
+            <h1>QuantEdge Insights</h1>
+            <div class="header-right">
+                <a href="#" target="_blank" rel="noopener noreferrer"
+                    >About Us</a
+                >
+                <a href="#" target="_blank" rel="noopener noreferrer"
+                    >Contact</a
+                >
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="input-group">
+                <input
+                    type="text"
+                    id="symbol"
+                    placeholder="Enter stock symbol (e.g., AAPL)"
+                />
+                <button onclick="analyzeStock()" id="analyzeBtn">
+                    Analyze
+                </button>
+            </div>
+            <button
+                onclick="downloadPDF()"
+                id="downloadBtn"
+                class="download-btn"
+                style="display: none"
+            >
+                <i class="fas fa-file-pdf"></i> Download Premium Report
+            </button>
+
+            <div id="report-content"></div>
+        </div>
+
+        <div id="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            function analyzeStock() {
+                const symbol = document
+                    .getElementById("symbol")
+                    .value.toUpperCase();
+                if (!symbol) {
+                    document.getElementById("symbol").classList.add("error");
+                    return;
+                }
+                document.getElementById("symbol").classList.remove("error");
+
+                document.getElementById("analyzeBtn").disabled = true;
+                $("#report-content").html("");
+                $("#downloadBtn").hide();
+                $("#loading").css("display", "flex");
+
+                fetch(`/analyze?symbol=${symbol}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        $("#loading").hide();
+                        displayReport(data.report);
+                        $("#downloadBtn").show();
+                        document.getElementById("analyzeBtn").disabled = false;
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        $("#report-content").append(
+                            '<div class="report-section"><h2>Error</h2><p>Error fetching data. Please try again.</p></div>',
+                        );
+                        $("#loading").hide();
+                        document.getElementById("analyzeBtn").disabled = false;
+                    });
+            }
+
+            function displayReport(report) {
+                const reportContent = $("#report-content");
+                reportContent.empty();
+
+                report.forEach((section) => {
+                    const sectionHtml = formatContent(
+                        section.content,
+                        section.source,
+                    );
+                    reportContent.append(sectionHtml);
+                });
+            }
+
+            function formatContent(content, dataSource) {
+                if (!content) {
+                    return '<div class="report-section"><p>No data available</p></div>';
+                }
+            
+                try {
+                    let formatted = marked.parse(content);
+            
+                    // Special handling for research articles
+                    if (content.includes("Research Articles Analysis")) {
+                        // Style research paper sections
+                        formatted = formatted.replace(
+                            /#### \d+\.(.*?)(?=####|\n\n|$)/gs,
+                            match => `<div class="research-paper">${match}</div>`
+                        );
+            
+                        // Style authors and publication info
+                        formatted = formatted.replace(
+                            /\*\*Published\*\*: (.*?)\n\*\*Authors\*\*: (.*?)\n\*\*Source\*\*: \[(.*?)\]\((.*?)\)/g,
+                            `<div class="research-meta">
+                                <div><strong>Published:</strong> $1</div>
+                                <div><strong>Authors:</strong> $2</div>
+                                <div><strong>Source:</strong> <a href="$4" class="research-link" target="_blank">View Paper</a></div>
+                            </div>`
+                        );
+            
+                        // Style research themes and implications
+                        formatted = formatted.replace(
+                            /### Research Themes/,
+                            '<div class="research-themes"><h3>Research Themes</h3>'
+                        );
+                        formatted = formatted.replace(
+                            /### Investment Implications/,
+                            '</div><div class="investment-implications"><h3>Investment Implications</h3>'
+                        );
+                        formatted = formatted.replace(
+                            /### Research-Based Recommendations/,
+                            '</div><div class="research-recommendations"><h3>Research-Based Recommendations</h3>'
+                        );
+                    }
+            
+                    // Regular formatting
+                    formatted = formatted.replace(
+                        /PLACEHOLDER/g,
+                        '<span class="dummy-data">PLACEHOLDER</span>'
+                    );
+                    formatted = formatted.replace(
+                        /### Key Metrics[\s\S]*?(?=###|$)/,
+                        formatKeyMetrics
+                    );
+                    formatted = formatted.replace(
+                        /> (.*)/g,
+                        '<div class="quote">$1</div>'
+                    );
+                    formatted = formatted.replace(
+                        /==(.*?)==/g,
+                        '<span class="highlight">$1</span>'
+                    );
+                    formatted = formatted.replace(
+                        /<ul>/g,
+                        '<ul class="fa-ul">'
+                    );
+                    formatted = formatted.replace(
+                        /<li>/g,
+                        '<li><span class="fa-li"><i class="fas fa-check-circle"></i></span>'
+                    );
+                    formatted = formatted.replace(
+                        /<ol>/g,
+                        '<ol class="custom-counter">'
+                    );
+            
+                    return `<div class="report-section">${formatted}</div>`;
+                } catch (error) {
+                    console.error("Error formatting content:", error);
+                    return '<div class="report-section"><p>Error formatting content</p></div>';
+                }
+            }
+
+            function formatKeyMetrics(match) {
+                const metrics = match
+                    .split("\n")
+                    .filter((line) => line.includes(":"));
+                let formattedMetrics = '<div class="key-metrics">';
+                metrics.forEach((metric) => {
+                    const [key, value] = metric.split(":");
+                    formattedMetrics += `
+                    <div class="metric-card">
+                        <div class="metric-title">${key.trim()}</div>
+                        <div class="metric-value">${value.trim()}</div>
+                    </div>
+                `;
+                });
+                formattedMetrics += "</div>";
+                return formattedMetrics;
+            }
+
+            function downloadPDF() {
+                const reportContent = document.getElementById("report-content");
+
+                if (!reportContent || !reportContent.innerHTML.trim()) {
+                    alert(
+                        "No report content available. Please generate a report first.",
+                    );
+                    return;
+                }
+
+                $("#loading").css("display", "flex");
+
+                const symbol = document
+                    .getElementById("symbol")
+                    .value.toUpperCase();
+
+                fetch("/download_pdf", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        html_content: reportContent.innerHTML,
+                        company: symbol,
+                    }),
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        return response.blob();
+                    })
+                    .then((blob) => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.style.display = "none";
+                        a.href = url;
+                        a.download = `${symbol}_QuantEdge_Premium_Report.pdf`;
+                        document.body.appendChild(a);
+                        a.click();
+
+                        window.URL.revokeObjectURL(url);
+                        a.remove();
+                        $("#loading").hide();
+                    })
+                    .catch((error) => {
+                        console.error("Error downloading PDF:", error);
+                        alert("Error downloading PDF. Please try again.");
+                        $("#loading").hide();
+                    });
+            }
+
+            document
+                .getElementById("symbol")
+                .addEventListener("keypress", function (event) {
+                    if (event.key === "Enter") {
+                        analyzeStock();
+                    }
+                });
+        </script>
+    </body>
+</html>

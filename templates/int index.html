@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Analysis</title>
+    <style>
+      /* ... your existing styles ... */
+        #loading {
+            display: none; /* Hidden initially */
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Stock Analysis</h1>
+
+    <input type="text" id="symbol" placeholder="Enter stock symbol (e.g., AAPL)" pattern="[A-Z]{1,5}">
+    <button id="analyze">Analyze</button>
+    <div id="loading">Analyzing... <div class="spinner"></div></div> <div id="pdf-link"></div>
+
+    <div id="report"></div>
+
+
+    <script>
+      // ... (your existing JavaScript) ...
+
+      analyzeButton.addEventListener('click', () => {
+            const symbol = symbolInput.value;
+            if (!symbol) {
+                displayError('Please enter a stock symbol.');
+                return;
+            }
+            if (!symbol.match(/[A-Z]{1,5}/)) { // Basic validation
+                displayError('Invalid symbol format.  Use uppercase letters (e.g., AAPL).');
+                return;
+            }
+           // Show loading indicator
+            document.getElementById('loading').style.display = 'block';
+            clearError();   // Clear previous errors
+            // ... (rest of your fetch code) ...
+
+                .then(data => {
+                    document.getElementById('loading').style.display = 'none'; // Hide loading
+                   // ... (rest of your data handling code) ...
+                })
+                .catch(error => {
+                    document.getElementById('loading').style.display = 'none'; // Hide loading
+                   displayError(`An error occurred: ${error.message}`);
+
+                });
+            });
+
+
+
+        function displayError(message) {
+            reportDiv.innerHTML = `<p class="error-message">${message}</p>`;
+        }
+
+        function clearError() {
+            reportDiv.innerHTML = '';
+        }
+
+
+      downloadPDFButton.addEventListener('click', () => {
+           // ... (your existing code)
+          .then(blob => {
+             const link = document.createElement('a');
+             link.href = URL.createObjectURL(blob);
+             link.download = `${symbol}_Report.pdf`;
+             link.textContent = 'Download PDF';  // Text for the link
+
+             // Clear any previous link and add the new one
+              document.getElementById('pdf-link').innerHTML = '';
+              document.getElementById('pdf-link').appendChild(link);
+           });
+      });
+
+
+
+    </script>
+
+</body>
+</html>

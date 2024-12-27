@@ -1,0 +1,8 @@
+Flask==2.2.2
+yfinance==0.2.12
+pdfkit==1.5.0
+requests==2.31.0
+datetime==4.3
+json==2.0.9
+groq==0.1.0
+reportlab==3.6.11
